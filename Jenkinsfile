@@ -1,6 +1,19 @@
 pipeline{
     agent any
     stages{
+        stage('Get Commit Details') {
+            steps {
+                script {
+                    def commitMessage = sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
+                    def commitAuthor = sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
+                    def commitSHA = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+
+                    echo "Commit Message: ${commitMessage}"
+                    echo "Commit Author: ${commitAuthor}"
+                    echo "Commit SHA: ${commitSHA}"
+                }
+            }
+        }
         stage('Build'){
             steps{
                 echo 'Building the app'
