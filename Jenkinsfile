@@ -3,15 +3,9 @@ pipeline {
 
     stages {
         stage('Install Node.js') {
-            agent {
-                docker {
-                    image 'node:18'
-                    label 'my-docker-agent'
-                }
-            }
             steps {
                 script {
-                    sh 'node --version'
+                    sh 'echo "Hello World"'
                 }
             }
         }
