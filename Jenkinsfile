@@ -1,24 +1,28 @@
-pipeline{
-    agent {
-        docker {
-            image 'node:latest'
-            args '-u root'
-        }
-    }
-    stages{
-        stage('Get Commit Details') {
+pipeline {
+    agent any
+
+    stages {
+        stage('Install Node.js') {
+            agent {
+                docker {
+                    image 'node:18'
+                    label 'my-docker-agent'
+                }
+            }
             steps {
                 script {
-                    sh(script: 'git log -1 --pretty=%B', returnStdout: true).trim()
-                    sh(script: 'git log -1 --pretty=%an', returnStdout: true).trim()
-                    sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+                    sh 'node --version'
                 }
             }
         }
-        stage('Install Dependencies') {
-            steps {
-                sh 'yarn install'
-            }
+    }
+
+    post {
+        success {
+            echo 'Build successful! Deploying...'
+        }
+        failure {
+            echo 'Build failed! Notify the team...'
         }
     }
 }
