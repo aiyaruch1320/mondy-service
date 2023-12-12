@@ -1,11 +1,13 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'node:18.19.0' }
+    }
 
     stages {
-        stage('Install Node.js') {
+        stage('Install Dependencies') {
             steps {
                 script {
-                    sh 'echo "Hello World"'
+                    sh 'yarn install'
                 }
             }
         }
